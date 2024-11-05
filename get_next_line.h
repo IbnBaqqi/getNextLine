@@ -6,7 +6,7 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:32:56 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/05 01:25:24 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:36:43 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+# define BUFFER_SIZE 1024
+
 char *get_next_line(int fd);
+char	*ft_strchr(const char *s, int c)
 
 #endif
