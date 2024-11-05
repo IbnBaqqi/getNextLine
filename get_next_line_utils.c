@@ -6,7 +6,8 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:34:10 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/05 00:34:11 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/05 01:13:44 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
