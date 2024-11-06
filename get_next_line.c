@@ -6,7 +6,7 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:33:49 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/05 16:50:28 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/06 19:35:13 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,23 @@
 
 //#include <>
 //ssize_t read(int fd, void *buf, size_t count);
+// Buffer size when compiling.
 
-char *get_next_line(int fd)
+char 	*get_next_line(int fd)
 {
-	static char		*left;
+	static char		left;
 	ssize_t			read_byte;
-	char			buf[BUFFER_SIZE];
+	static char		*buf;
 	char			*check_nl;
 
-	read_byte = read(fd, buf, 5);
-	if (read_byte < 0)
-		perror("Byte is cooked");
-	while (read_byte != 0 && (buf))
+	buf = malloc(BUFFER_SIZE + 1);
+	if (!buf)
+		return (NULL);
+	while (read_byte != 0)
 	{
-		check_nl = ft_strchr(read_byte, '\n');
+		read_byte = read(fd, buf, BUFFER_SIZE);
+		if (read_byte == -1)
+        perror("Byte is cooked");
 	}
 }
 
@@ -42,3 +45,25 @@ int main(void)
 		return (-1);
 	line = get_next_line(fd);
 }
+
+
+
+asd
+ds
+
+/*
+while (read_byte != 0)
+    {
+        if (!ft_strchr(buf, '\n'))
+            continue;
+        else
+        {
+            char nl_point = ft_strchr(buf, '\n');
+            break;
+        }
+    }
+    char *buffer = malloc(nl_point - buf);
+    if(!buffer)
+        return (NULL);
+    ft_strlcpy(buffer, buf, (nl_point - buf) + 1);
+*/
