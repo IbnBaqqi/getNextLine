@@ -6,7 +6,7 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:32:56 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/05 16:36:43 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/07 20:03:30 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@
 # define BUFFER_SIZE 1024
 
 char *get_next_line(int fd);
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *s, int c);
 
 #endif
