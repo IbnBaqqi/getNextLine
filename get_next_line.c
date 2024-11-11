@@ -6,7 +6,7 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:33:49 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/10 20:25:06 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:34:29 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,46 +23,61 @@ char 	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buf = read_file(fd, buf);
+		if(!buf)
+			return (NULL);
 }
 
 //To read the file;
 static char *read_file(int fd, char *buf)
 {
-	
+	char	*buf_new;
+	int		read_byte;
+
+	if(!buf)
+		return(0); //Change to return dynamic later
+	buf_new = malloc(BUFFER_SIZE + 1);
+	read_byte = 1;
+	while (read_byte != 0)
+	{
+		read_byte = read(fd, buf_new, BUFFER_SIZE);
+		if (read_byte == -1)
+			return (0);
+		buf_new[read_byte] = 0;
+		buf = add_buf(buf, buf_new);
+		if (ft_strchr(buf_new, '\n'))
+			break;
+	}
+	free(buf_new);
+	return (buf);
 }
 
-//To add the line to buffer
-static char	*add_buf(char *buf, int count, size_t BUFFER_SIZE)
+//To join allocated buf to buffer
+static char	*add_buf(char *buf_new, char *buf)
 {
-	int			i;
-	int			size;
-	static char	*left;
-	char		*new_buf;
-
-	i = 0;
-	while (buf[i++] != '\n')
-		size++;
-	new_buf = malloc(size + 1);
-	ft_strlcpy(new_buf, buf, size + 1);// change the ft_strlcpy to '\n' instead of '\0'
-	buf[count * BUFFER_SIZE] = '\0';
-	left = ft_strdup(buf[size]);
+	char	*new_buf;
+	
+	new_buf = ft_strjoin(buf_new, buf);
+	free(buf_new);
 	return (new_buf);
 }
 
-//To check is the buffer has newline
-static int	check_nl(char *buf, int count, int buf_size)
+static char	*get_line(char *buf)
 {
-	int	i;
-	int	length;
+	char	*line;
+	int		i;
 
 	i = 0;
-	length = count * buf_size;
-	while (i < length)
+	if(!*buf)
+		return (NULL);
+	while(buf[i] && buf[i] != '\n')
+		i++;
+	line = malloc(i + 2);
+	i = 0;
+	while (buf[i] && buf[i] != '\n')
 	{
-		if (buf[i] = '\n')
-			return (1);
+		line[i] = buf[i];
+		i++;
 	}
-	return (0);
 }
 
 int main(void)
