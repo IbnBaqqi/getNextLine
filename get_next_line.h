@@ -6,7 +6,7 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:32:56 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/07 20:03:30 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:04:56 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-# define BUFFER_SIZE 1024
+//# define BUFFER_SIZE 42
 
-char *get_next_line(int fd);
+char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);
+int		ft_strlen(const char *str);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup(const char *s);
+void	*ft_calloc(size_t count, size_t size);
 
 #endif

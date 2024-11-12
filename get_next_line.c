@@ -6,59 +6,69 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:33:49 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/12 09:04:49 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:13:06 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#define BUFFER_SIZE 1024
 
-char 	*get_next_line(int fd)
+static char	*read_file(int fd, char *buf);
+static char	*add_buf(char *buf_new, char *buf);
+static char	*get_line(char *buf);
+static char	*get_next(char *buf);
+
+char	*get_next_line(int fd)
 {
-	static char		left;
 	char			*line;
-	ssize_t			read_byte;
 	static char		*buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buf = read_file(fd, buf);
-		if(!buf)
-			return (NULL);
+	if (!buf)
+		return (NULL);
 	line = get_line(buf);
+	buf = get_next(buf);
+	return (line);
 }
 
 //To read the file;
-static char *read_file(int fd, char *buf)
+static char	*read_file(int fd, char *buf)
 {
 	char	*buf_new;
-	int		read_byte;
+	ssize_t	read_byte;
 
-	if(!buf)
-		return(0); //Change to return dynamic later
+	if (!buf)
+		buf = ft_strdup("");
 	buf_new = malloc(BUFFER_SIZE + 1);
+	if (!buf_new)
+		return (NULL);
 	read_byte = 1;
-	while (read_byte != 0)
+	while (read_byte > 0)
 	{
 		read_byte = read(fd, buf_new, BUFFER_SIZE);
 		if (read_byte == -1)
-			return (0);
+		{
+			free(buf_new);
+			free(buf);
+			return (NULL);
+		}
 		buf_new[read_byte] = 0;
 		buf = add_buf(buf, buf_new);
 		if (ft_strchr(buf_new, '\n'))
-			break;
+			break ;
 	}
 	free(buf_new);
 	return (buf);
 }
 
-//To join allocated buf to buffer
-static char	*add_buf(char *buf_new, char *buf)
+//To join allocated buf to buffer and free
+static char	*add_buf(char *buf, char *buf_new)
 {
 	char	*new_buf;
-	
-	new_buf = ft_strjoin(buf_new, buf);
-	free(buf_new);
+
+	new_buf = ft_strjoin(buf, buf_new);
+	free(buf);
 	return (new_buf);
 }
 
@@ -68,9 +78,9 @@ static char	*get_line(char *buf)
 	int		i;
 
 	i = 0;
-	if(!*buf)
+	if (!buf[i])
 		return (NULL);
-	while(buf[i] && buf[i] != '\n')
+	while (buf[i] && buf[i] != '\n')
 		i++;
 	line = malloc(i + 2);
 	i = 0;
@@ -81,132 +91,52 @@ static char	*get_line(char *buf)
 	}
 	if (buf[i] && buf[i] == '\n')
 		line[i++] = '\n';
-	return(line);
+	line[i++] = '\0';
+	return (line);
 }
 
-int main(void)
+static char	*get_next(char *buf)
 {
-	int		fd;
+	int		i;
+	int		j;
 	char	*line;
 
-	fd = open("Doc.txt", O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	close(fd);
-	return (0);
-}
-
-/*
-
-asd
-ds
-
-while (read_byte != 0)
-    {
-        if (!ft_strchr(buf, '\n'))
-            continue;
-        else
-        {
-            char nl_point = ft_strchr(buf, '\n');
-            break;
-        }
-    }
-    char *buffer = malloc(nl_point - buf);
-    if(!buffer)
-        return (NULL);
-    ft_strlcpy(buffer, buf, (nl_point - buf) + 1);
-
-
-
-char 	*get_next_line(int fd)
-{
-	static char		left;
-	ssize_t			read_byte;
-	static char		*buf;
-	int				check_nl;
-	int				count;
-	char			*new_buf;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf)
+	i = 0;
+	while (buf[i] && buf[i] != '\n')
+		i++;
+	if (!buf[i])
+	{
+		free(buf);
 		return (NULL);
-	while (read_byte != 0)
-	{
-		read_byte = read(fd, buf, BUFFER_SIZE);
-		if (read_byte == -1)
-			return (0);
-		else if (read_byte == 0)
-			break;
-		count++;
-		if (!(check_nl(buf, count, BUFFER_SIZE)))
-			continue;
-		else
-		{
-			char *new_buf = add_buf(buf, count, BUFFER_SIZE);
-			break;
-		}
 	}
+	line = ft_calloc(ft_strlen(buf) - i + 1, sizeof(char));
+	i++;
+	j = 0;
+	while (buf[i])
+		line[j++] = buf[i++];
 	free(buf);
-	return (new_buf);
+	return (line);
 }
 
-//To read the file;
-static *char read_file()
+/*int	main(void)
 {
-	
-}
-
-//To add the line to buffer
-static char	*add_buf(char *buf, int count, size_t BUFFER_SIZE)
-{
-	int			i;
-	int			size;
-	static char	*left;
-	char		*new_buf;
-
-	i = 0;
-	while (buf[i++] != '\n')
-		size++;
-	new_buf = malloc(size + 1);
-	ft_strlcpy(new_buf, buf, size + 1);// change the ft_strlcpy to '\n' instead of '\0'
-	buf[count * BUFFER_SIZE] = '\0';
-	left = ft_strdup(buf[size]);
-	return (new_buf);
-}
-
-//To check is the buffer has newline
-static int	check_nl(char *buf, int count, int buf_size)
-{
-	int	i;
-	int	length;
-
-	i = 0;
-	length = count * buf_size;
-	while (i < length)
-	{
-		if (buf[i] = '\n')
-			return (1);
-	}
-	return (0);
-}
-
-int main(void)
-{
+	int		i;
 	int		fd;
 	char	*line;
 
+	i = 0;
 	fd = open("Doc.txt", O_RDONLY);
 	if (fd == -1)
 		return (-1);
 	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
+	while (line != NULL)
+	{
+		printf("%s", line);
+		free(line);
+		line = get_next_line(fd);
+
+		i++;
+	}
 	close(fd);
 	return (0);
-}
-*/
+}*/
