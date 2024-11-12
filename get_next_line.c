@@ -6,7 +6,7 @@
 /*   By: sabdulba <sabdulba@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 00:33:49 by sabdulba          #+#    #+#             */
-/*   Updated: 2024/11/11 17:34:29 by sabdulba         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:04:49 by sabdulba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ char 	*get_next_line(int fd)
 	buf = read_file(fd, buf);
 		if(!buf)
 			return (NULL);
+	line = get_line(buf);
 }
 
 //To read the file;
@@ -78,6 +79,9 @@ static char	*get_line(char *buf)
 		line[i] = buf[i];
 		i++;
 	}
+	if (buf[i] && buf[i] == '\n')
+		line[i++] = '\n';
+	return(line);
 }
 
 int main(void)
